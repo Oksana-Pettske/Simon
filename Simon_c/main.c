@@ -14,7 +14,7 @@
 const uint8_t block_sizes[] = { 32, 48, 64, 96, 128 };
 const uint16_t key_sizes[] = { 64, 96, 128, 144, 256 };
 const uint8_t round_limits[] = { 32, 36, 44, 54, 72 };
-const uint8_t z_assign[] = { 0, 1, 3, 3, 4 };
+const uint8_t z_assign[] = { 0, 1, 2, 3, 4 };
 
 uint64_t z_arrays[5] = {0b0001100111000011010100100010111110110011100001101010010001011111,
                         0b0001011010000110010011111011100010101101000011001001111101110001,
@@ -275,9 +275,9 @@ void simon_decrypt_48(uint8_t round_limit, uint8_t *key_sched, uint8_t *cipher_t
     bword_24 *bw_ptr = (bword_24 *)plain_text;
 
     uint32_t tmp;
-    uint8_t i;
+    int8_t i;
 
-    for(i = round_limit - 1 ; i > 1; i--) {
+    for(i = round_limit - 1 ; i >= 0; i--) {
         tmp = (shift_one & shift_eight) ^ y_word ^ shift_two;
 
         y_word = x_word;
@@ -300,9 +300,9 @@ void simon_decrypt_64(uint8_t round_limit, uint8_t *key_sched, uint8_t *cipher_t
     uint32_t *round_key_ptr = (uint32_t *)key_sched;
     uint32_t *word_ptr = (uint32_t *)plain_text;
     uint32_t tmp;
-    uint8_t i;
+    int8_t i;
 
-    for(i = round_limit -1 ; i > 0; i--) {
+    for(i = round_limit -1 ; i >= 0; i--) {
         tmp = (shift_one & shift_eight) ^ y_word ^ shift_two;
 
         y_word = x_word;
@@ -323,12 +323,12 @@ void simon_decrypt_96(uint8_t round_limit, uint8_t *key_sched, uint8_t *cipher_t
     bw = *((bword_48 *)(cipher_text + 6));
     uint64_t y_word = bw.data;
 
-    bword_48 * bw_ptr = (bword_48 *)plain_text;
+    bword_48 *bw_ptr = (bword_48 *)plain_text;
 
     uint64_t tmp;
-    uint8_t i;
+    int8_t i;
 
-    for(i = round_limit - 1; i > 0; i--) {
+    for(i = round_limit - 1; i >= 0; i--) {
         tmp = (shift_one & shift_eight) ^ y_word ^ shift_two;
 
         y_word = x_word;
@@ -351,9 +351,9 @@ void simon_decrypt_128(uint8_t round_limit, uint8_t *key_sched, uint8_t *cipher_
     uint64_t *round_key_ptr = (uint64_t *)key_sched;
     uint64_t *word_ptr = (uint64_t *)plain_text;
     uint64_t tmp;
-    uint8_t i;
+    int8_t i;
 
-    for(i = round_limit - 1; i > 0; i--) {
+    for(i = round_limit - 1; i >= 0; i--) {
         tmp = (shift_one & shift_eight) ^ y_word ^ shift_two;
 
         y_word = x_word;
